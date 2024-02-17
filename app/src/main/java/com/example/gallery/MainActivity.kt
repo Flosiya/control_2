@@ -6,7 +6,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    GreetingWithButtons("Android")
+                    GreetingWithButtons()
                 }
             }
         }
@@ -31,7 +31,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun GreetingWithButtons(name: String) {
+fun GreetingWithButtons() {
+    var currentArtistIndex by remember { mutableStateOf(0) }
+    val artists = listOf("Mariya", "John", "Anna", "David", "Linda", "Michael", "Emma", "Daniel", "Olivia", "James")
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -40,17 +43,21 @@ fun GreetingWithButtons(name: String) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Hi, my name is $name!",
+            text = "Hi, my name is artist ${artists[currentArtistIndex]}!",
             modifier = Modifier.padding(bottom = 16.dp)
         )
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Button(onClick = { }) {
+            Button(onClick = {
+                currentArtistIndex = (currentArtistIndex - 1 + artists.size) % artists.size
+            }) {
                 Text(text = "Попередній")
             }
             Spacer(modifier = Modifier.width(16.dp))
-            Button(onClick = {}) {
+            Button(onClick = {
+                currentArtistIndex = (currentArtistIndex + 1) % artists.size
+            }) {
                 Text(text = "Наступний")
             }
         }
@@ -61,6 +68,6 @@ fun GreetingWithButtons(name: String) {
 @Composable
 fun GreetingWithButtonsPreview() {
     GalleryTheme {
-        GreetingWithButtons("Mariya")
+        GreetingWithButtons()
     }
 }
